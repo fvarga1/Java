@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import hr.java.vjezbe.entitet.FakultetRacunarstva;
 import hr.java.vjezbe.entitet.Ispit;
 import hr.java.vjezbe.entitet.ObrazovnaUstanova;
@@ -27,8 +30,12 @@ public class Glavna {
 	private static Scanner unos = new Scanner(System.in);
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
 	static DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd.MM.yyyy.'T'HH:mm");
+	
+	public static final Logger logger = LoggerFactory.getLogger(Glavna.class);
 
 	public static void main(String[] args) {
+		
+		logger.info("Program started");
 
 		Profesor[] poljeProfesora = new Profesor[BROJ_PROFESORA];
 		Predmet[] poljePredmeta = new Predmet[BROJ_PREDMETA];
