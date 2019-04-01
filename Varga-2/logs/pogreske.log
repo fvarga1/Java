@@ -1,1 +1,4 @@
 2019-03-31 18:43:58,037 INFO [main] h.j.v.g.Glavna [Glavna.java:38] Program started
+2019-04-01 20:58:14,133 INFO [main] h.j.v.g.Glavna [Glavna.java:41] Program started
+2019-04-01 20:59:48,946 ERROR [main] h.j.v.g.Glavna [Glavna.java:292] Text '123' could not be parsed at index 2
+2019-04-01 21:00:30,214 ERROR [main] h.j.v.g.Glavna [Glavna.java:292] Text '5' could not be parsed at index 0
