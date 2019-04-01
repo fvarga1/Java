@@ -78,7 +78,8 @@ public class Glavna {
 				try {
 					odabir = unos.nextInt();
 				} catch (InputMismatchException e) {
-					System.out.println("Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
+					System.out.println(
+							"Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
 					logger.error(e.getMessage());
 					ispravanFormat = false;
 				} finally {
@@ -103,7 +104,8 @@ public class Glavna {
 						try {
 							ocjenaZavrsnog = unos.nextInt();
 						} catch (InputMismatchException e) {
-							System.out.println("Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
+							System.out.println(
+									"Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
 							logger.error(e.getMessage());
 							ispravanFormat = false;
 						} finally {
@@ -119,7 +121,8 @@ public class Glavna {
 						try {
 							ocjenaObraneZavrsnog = unos.nextInt();
 						} catch (InputMismatchException e) {
-							System.out.println("Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
+							System.out.println(
+									"Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
 							logger.error(e.getMessage());
 							ispravanFormat = false;
 						} finally {
@@ -208,14 +211,17 @@ public class Glavna {
 		Integer brojEctsBodova = unos.nextInt();
 		unos.nextLine();
 
-		System.out.println("Odaberite profesora: ");
-		for (int i = 0; i < poljeProfesora.length; i++) {
-			System.out.println((i + 1) + ". " + poljeProfesora[i].getIme() + " " + poljeProfesora[i].getPrezime());
-		}
+		Integer odabir = 0;
+		do {
+			System.out.println("Odaberite profesora: ");
+			for (int i = 0; i < poljeProfesora.length; i++) {
+				System.out.println((i + 1) + ". " + poljeProfesora[i].getIme() + " " + poljeProfesora[i].getPrezime());
+			}
 
-		System.out.print("Odabir >> ");
-		Integer odabir = unos.nextInt();
-		unos.nextLine();
+			System.out.print("Odabir >> ");
+			odabir = unos.nextInt();
+			unos.nextLine();
+		} while (odabir < 1 || odabir > poljeProfesora.length);
 
 		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora[odabir - 1]);
 
@@ -228,7 +234,6 @@ public class Glavna {
 		predmet.setStudent(poljeStudenata);
 
 		return predmet;
-
 	}
 
 	/**
@@ -260,23 +265,27 @@ public class Glavna {
 	 */
 
 	public static Ispit unosIspita(Scanner unos, Predmet[] poljePredmeta, Student[] poljeStudenata) {
-		System.out.println("Odaberite predmet: ");
-		for (int i = 0; i < poljePredmeta.length; i++) {
-			System.out.println((i + 1) + ". " + poljePredmeta[i].getNaziv());
-		}
+		Integer odabirPredmeta = 0;
+		do {
+			System.out.println("Odaberite predmet: ");
+			for (int i = 0; i < poljePredmeta.length; i++) {
+				System.out.println((i + 1) + ". " + poljePredmeta[i].getNaziv());
+			}
+			System.out.print("Odabir >> ");
+			odabirPredmeta = unos.nextInt();
+			unos.nextLine();
+		} while (odabirPredmeta < 1 || odabirPredmeta > poljePredmeta.length);
 
-		System.out.print("Odabir >> ");
-		Integer odabirPredmeta = unos.nextInt();
-		unos.nextLine();
-
-		System.out.println("Odaberite studenta: ");
-		for (int i = 0; i < poljeStudenata.length; i++) {
-			System.out.println((i + 1) + ". " + poljeStudenata[i].getIme() + " " + poljeStudenata[i].getPrezime());
-		}
-
-		System.out.print("Odabir >> ");
-		Integer odabirStudenta = unos.nextInt();
-		unos.nextLine();
+		Integer odabirStudenta = 0;
+		do {
+			System.out.println("Odaberite studenta: ");
+			for (int i = 0; i < poljeStudenata.length; i++) {
+				System.out.println((i + 1) + ". " + poljeStudenata[i].getIme() + " " + poljeStudenata[i].getPrezime());
+			}
+			System.out.print("Odabir >> ");
+			odabirStudenta = unos.nextInt();
+			unos.nextLine();
+		} while (odabirStudenta < 0 || odabirStudenta > poljeStudenata.length);
 
 		System.out.print("Unesite ocjenu na ispitu (1-5):");
 		Integer ocjena = unos.nextInt();
@@ -288,7 +297,8 @@ public class Glavna {
 				System.out.println("Unesite datum i vrijeme ispita u formatu (dd.MM.yyyy.THH:mm): ");
 				vrijemeIspita = LocalDateTime.parse(unos.next(), formatter2);
 			} catch (Exception e) {
-				System.out.println("Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
+				System.out.println(
+						"Unos ima neispravan format, ili neodgovarajuæu vrijednost. Morat æete unijet ponovo.");
 				logger.error(e.getMessage());
 				ispravanFormat = false;
 			} finally {
