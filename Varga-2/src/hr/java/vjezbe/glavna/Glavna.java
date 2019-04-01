@@ -1,5 +1,6 @@
 package hr.java.vjezbe.glavna;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import hr.java.vjezbe.entitet.Predmet;
 import hr.java.vjezbe.entitet.Profesor;
 import hr.java.vjezbe.entitet.Student;
 import hr.java.vjezbe.entitet.VeleucilisteJave;
+import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
 
 public class Glavna {
@@ -97,6 +99,13 @@ public class Glavna {
 						poljeIspita);
 				obrazovneUstanove[j] = vj;
 				for (Student s : vj.getStudenati()) {
+					try {
+						vj.odrediProsjekOcjenaNaIspitima(poljeIspita);
+					} catch (NemoguceOdreditiProsjekStudentaException e) {
+						System.out.println(e.getMessage());
+						// Ukoliko student ima nepolozene ispite, ne unosimo za njega ocjene zavrsnog
+						continue;
+					}
 					int ocjenaZavrsnog = 0;
 					do {
 						ispravanFormat = true;
