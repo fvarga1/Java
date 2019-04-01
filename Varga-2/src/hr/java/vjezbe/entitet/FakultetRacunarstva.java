@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
+import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
 
 public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski {
 
@@ -34,7 +35,7 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 	}
 
 	@Override
-	public Student odrediStudentaZaRektorovuNagradu() {
+	public Student odrediStudentaZaRektorovuNagradu() throws PostojiViseNajmladjihStudenataException {
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
 		Student najUspjesnijiStudent = this.getStudenati()[0];
 		BigDecimal najboljiProsjek = BigDecimal.ZERO;
@@ -55,7 +56,13 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 				if (najUspjesnijiStudent.getDamtumRodjenja().isAfter(s.getDamtumRodjenja())) {
 					najboljiProsjek = prosjekOcjena;
 					najUspjesnijiStudent = s;
-				}
+				} else if (najUspjesnijiStudent.getDamtumRodjenja().isEqual(s.getDamtumRodjenja())) {
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.append("Najmlaði studenti istih prosjeka i datuma rodjenja: ");
+					stringBuilder.append(najUspjesnijiStudent.getIme() + " " + najUspjesnijiStudent.getPrezime());
+					stringBuilder.append(" i " + s.getIme() + " " + s.getPrezime());
+					throw new PostojiViseNajmladjihStudenataException(stringBuilder.toString());
+				} 
 			}
 		}
 		return najUspjesnijiStudent;

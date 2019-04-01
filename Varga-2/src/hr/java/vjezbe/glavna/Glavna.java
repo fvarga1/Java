@@ -16,6 +16,7 @@ import hr.java.vjezbe.entitet.Predmet;
 import hr.java.vjezbe.entitet.Profesor;
 import hr.java.vjezbe.entitet.Student;
 import hr.java.vjezbe.entitet.VeleucilisteJave;
+import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
 
 public class Glavna {
 
@@ -159,7 +160,14 @@ public class Glavna {
 				System.out.println("Najbolji student 2018. godine je " + naj2018_2.getIme() + " "
 						+ naj2018_2.getPrezime() + " JMBAG: " + naj2018_2.getJmbag());
 
-				Student rektorovaNagrada = fr.odrediStudentaZaRektorovuNagradu();
+				Student rektorovaNagrada = null;
+				try {
+					rektorovaNagrada = fr.odrediStudentaZaRektorovuNagradu();
+				} catch (PostojiViseNajmladjihStudenataException e) {
+					logger.error(e.getMessage());
+					System.out.println("Detektirano vise najmladjih studenata: " + e.getMessage());
+					System.exit(0);
+				}
 				System.out.println("Student koji je osvojio rektorovu nagradu je " + rektorovaNagrada.getIme() + " "
 						+ rektorovaNagrada.getPrezime() + " JMBAG: " + rektorovaNagrada.getJmbag());
 				break;
