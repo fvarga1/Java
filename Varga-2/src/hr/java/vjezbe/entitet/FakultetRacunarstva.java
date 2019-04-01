@@ -3,6 +3,7 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 
 public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski {
@@ -19,11 +20,13 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 		try {
 			prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispiti);
 		} catch (NemoguceOdreditiProsjekStudentaException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Student " + ispiti[0].getStudent().getIme() + " " + ispiti[0].getStudent().getPrezime() + 
+					" zbog negativne ocjene na jednom od ispita ima prosjek „nedovoljan (1)!");
+			Glavna.logger.error(e.getMessage());
 			// Ukoliko student ima nepolozene ispite, konacna ocjena studija je 1
 			return BigDecimal.ONE;
 		}
-		return  new BigDecimal(3)
+		return new BigDecimal(3)
 				.multiply(prosjekOcjena)
 				.add(new BigDecimal(ocjenaDiplomskog))
 				.add(new BigDecimal(ocjenaObrane))
@@ -41,6 +44,7 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 			try {
 				prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispitiStudenta);
 			} catch (NemoguceOdreditiProsjekStudentaException e) {
+				Glavna.logger.error(e.getMessage());
 				// Ukoliko student ima ispite ocjenjene negativnom ocjenom, preskacemo ga
 				continue;
 			}
