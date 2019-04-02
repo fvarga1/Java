@@ -3,6 +3,9 @@ package hr.java.vjezbe.entitet;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
+import ch.qos.logback.classic.Logger;
+import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
+
 public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska {
 
 	public VeleucilisteJave(String nazivUstanove, Predmet[] predmeti, Profesor[] profesori, Student[] studenati,
@@ -13,8 +16,16 @@ public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska
 	@Override
 	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Integer ocjenaZavrsnog,
 			Integer ocjenaObrane) {
+		BigDecimal prosjekOcjena = null;
+		try {
+			prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispiti);
+		} catch (NemoguceOdreditiProsjekStudentaException e) {
+			System.out.println(e.getMessage());
+			// Ukoliko student ima nepolozene ispite, konacna ocjena studija je 1
+			return BigDecimal.ONE;
+		}
 		return new BigDecimal(2)
-				.multiply(this.odrediProsjekOcjenaNaIspitima(ispiti))
+				.multiply(prosjekOcjena)
 				.add(new BigDecimal(ocjenaZavrsnog + ocjenaObrane))
 				.divide(new BigDecimal(4));
 	}
@@ -27,7 +38,13 @@ public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska
 		BigDecimal najboljiProsjek = BigDecimal.ZERO;
 		for (Student s : this.getStudenati()) {
 			Ispit[] ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
-			BigDecimal prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispitiStudenta);
+			BigDecimal prosjekOcjena;
+			try {
+				prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispitiStudenta);
+			} catch (NemoguceOdreditiProsjekStudentaException e) {
+				// Ukoliko student ima ispite ocjenjene negativnom ocjenom, preskacemo ga
+				continue;
+			}
 			if (prosjekOcjena.compareTo(najboljiProsjek) == 1) {
 				najboljiProsjek = prosjekOcjena;
 				najUspjesnijiStudent = s;
