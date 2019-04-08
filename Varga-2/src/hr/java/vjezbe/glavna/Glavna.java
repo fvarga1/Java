@@ -32,6 +32,7 @@ public class Glavna {
 	public static final int BROJ_OBRAZOVNIH_USTANOVA = 2;
 
 	private static boolean ispravanFormat = true;
+	private static boolean ispravanUnos = true;
 
 	private static Scanner unos = new Scanner(System.in);
 	static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
@@ -82,7 +83,7 @@ public class Glavna {
 					odabir = unos.nextInt();
 				} catch (InputMismatchException e) {
 					System.out.println(
-							"Unos ima neispravan format, ili neodgovarajuÊu vrijednost. Morat Êete unijet ponovo.");
+							"Unos ima neispravan format, ili neodgovarajuƒáu vrijednost. Morat ƒáete unijet ponovo.");
 					logger.error(e.getMessage());
 					ispravanFormat = false;
 				} finally {
@@ -115,7 +116,7 @@ public class Glavna {
 							ocjenaZavrsnog = unos.nextInt();
 						} catch (InputMismatchException e) {
 							System.out.println(
-									"Unos ima neispravan format, ili neodgovarajuÊu vrijednost. Morat Êete unijet ponovo.");
+									"Unos ima neispravan format, ili neodgovarajuÔøΩu vrijednost. Morat ÔøΩete unijet ponovo.");
 							logger.error(e.getMessage());
 							ispravanFormat = false;
 						} finally {
@@ -132,7 +133,7 @@ public class Glavna {
 							ocjenaObraneZavrsnog = unos.nextInt();
 						} catch (InputMismatchException e) {
 							System.out.println(
-									"Unos ima neispravan format, ili neodgovarajuÊu vrijednost. Morat Êete unijet ponovo.");
+									"Unos ima neispravan format, ili neodgovarajuÔøΩu vrijednost. Morat ÔøΩete unijet ponovo.");
 							logger.error(e.getMessage());
 							ispravanFormat = false;
 						} finally {
@@ -224,20 +225,51 @@ public class Glavna {
 		String sifra = unos.nextLine();
 		System.out.println("Unesite naziv predmeta: ");
 		String naziv = unos.nextLine();
-		System.out.println("Unesite broj ECTS bodova za predmet " + naziv + " ");
-		Integer brojEctsBodova = unos.nextInt();
-		unos.nextLine();
+
+//		 slu≈æi za primjer try catch-a
+		/*
+		 * do { ispravanFormat = true; System.out.println(
+		 * "Odaberite obrazovnu ustanovu za navedene podatke koju ≈æelite unijeti (1 - Veleuƒçili≈°te Jave, 2 - Fakultet raƒçunarstva):"
+		 * ); try { odabir = unos.nextInt(); } catch (InputMismatchException e) {
+		 * System.out.println(
+		 * "Unos ima neispravan format, ili neodgovarajuƒáu vrijednost. Morat ƒáete unijet ponovo."
+		 * ); logger.error(e.getMessage()); ispravanFormat = false; } finally {
+		 * unos.nextLine(); } } while (!ispravanFormat && (odabir < 1 || odabir > 2));
+		 */
+		Integer brojEctsBodova = 0;
+		do {
+			ispravanUnos = true;
+			System.out.println("Unesite broj ECTS bodova za predmet " + naziv + " ");
+			try {
+				brojEctsBodova = unos.nextInt();
+			} catch (InputMismatchException e) {
+				System.out
+						.println("Unijeli ste neispravan broj ECTS bodova. Molimo unesite numeriƒçki broj ECTS bodova.");
+				logger.error(e.getMessage());
+				ispravanUnos = false;
+			} finally {
+				unos.nextLine();
+			}
+		} while (!ispravanUnos);
 
 		Integer odabir = 0;
 		do {
+			ispravanUnos = true;
 			System.out.println("Odaberite profesora: ");
 			for (int i = 0; i < poljeProfesora.length; i++) {
 				System.out.println((i + 1) + ". " + poljeProfesora[i].getIme() + " " + poljeProfesora[i].getPrezime());
 			}
-
-			System.out.print("Odabir >> ");
-			odabir = unos.nextInt();
-			unos.nextLine();
+			try {
+				System.out.print("Odabir >> ");
+				odabir = unos.nextInt();
+				unos.nextLine();
+			} catch (InputMismatchException e) {
+				System.out.println("Niste odabrali ispravan broj profesora. Molimo ponovite unos.");
+				logger.error(e.getMessage());
+				ispravanUnos = false;
+			} finally {
+				unos.nextLine();
+			}
 		} while (odabir < 1 || odabir > poljeProfesora.length);
 
 		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora[odabir - 1]);
@@ -315,7 +347,7 @@ public class Glavna {
 				vrijemeIspita = LocalDateTime.parse(unos.next(), formatter2);
 			} catch (Exception e) {
 				System.out.println(
-						"Unos ima neispravan format, ili neodgovarajuÊu vrijednost. Morat Êete unijet ponovo.");
+						"Unos ima neispravan format, ili neodgovarajuÔøΩu vrijednost. Morat ÔøΩete unijet ponovo.");
 				logger.error(e.getMessage());
 				ispravanFormat = false;
 			} finally {
