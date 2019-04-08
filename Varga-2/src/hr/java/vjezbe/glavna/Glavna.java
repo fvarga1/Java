@@ -262,7 +262,6 @@ public class Glavna {
 			try {
 				System.out.print("Odabir >> ");
 				odabir = unos.nextInt();
-				unos.nextLine();
 			} catch (InputMismatchException e) {
 				System.out.println("Niste odabrali ispravan broj profesora. Molimo ponovite unos.");
 				logger.error(e.getMessage());
