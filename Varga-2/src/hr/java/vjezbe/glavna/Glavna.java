@@ -35,7 +35,7 @@ public class Glavna {
 	 * Konstante za promjenu broja profesora, predmeta, studenata i isptinih rokova
 	 */
 	public static final int BROJ_PROFESORA = 2;
-	public static final int BROJ_PREDMETA = 2;
+	public static final int BROJ_PREDMETA = 3;
 	public static final int BROJ_STUDENATA = 2;
 	public static final int BROJ_ISPITNIH_ROKOVA = 2;
 	public static final int BROJ_OBRAZOVNIH_USTANOVA = 2;
@@ -61,6 +61,7 @@ public class Glavna {
 		Map<Profesor, List<Predmet>> mapaProfesorPredmeti = new HashMap<>();
 
 		for (int j = 0; j < BROJ_OBRAZOVNIH_USTANOVA; j++) {
+			IsprazniKolekcije(poljeProfesora, poljePredmeta, poljeStudenata, poljeIspita, mapaProfesorPredmeti);
 			System.out.println("Unesite podatke za " + (j + 1) + ". obrazovnu ustanovu");
 			for (int i = 0; i < BROJ_PROFESORA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". profesora:");
@@ -313,6 +314,16 @@ public class Glavna {
 				break;
 			}
 		}
+	}
+
+	private static void IsprazniKolekcije(List<Profesor> poljeProfesora, List<Predmet> poljePredmeta,
+			List<Student> poljeStudenata, List<Ispit> poljeIspita, Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
+		
+		poljeIspita.clear();
+		poljePredmeta.clear();
+		poljeProfesora.clear();
+		poljeStudenata.clear();
+		mapaProfesorPredmeti.clear();
 	}
 
 	/**
