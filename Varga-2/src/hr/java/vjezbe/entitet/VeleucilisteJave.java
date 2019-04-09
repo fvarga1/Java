@@ -2,19 +2,21 @@ package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.qos.logback.classic.Logger;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 
 public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska {
 
-	public VeleucilisteJave(String nazivUstanove, Predmet[] predmeti, Profesor[] profesori, Student[] studenati,
-			Ispit[] ispiti) {
+	public VeleucilisteJave(String nazivUstanove, List<Predmet> predmeti, List<Profesor> profesori,
+			List<Student> studenati, List<Ispit> ispiti) {
 		super(nazivUstanove, predmeti, profesori, studenati, ispiti);
 	}
 
 	@Override
-	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Ocjena ocjenaZavrsnog,
+	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(List<Ispit> ispiti, Ocjena ocjenaZavrsnog,
 			Ocjena ocjenaObrane) {
 		BigDecimal prosjekOcjena = null;
 		try {
@@ -24,21 +26,20 @@ public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska
 			// Ukoliko student ima nepolozene ispite, konacna ocjena studija je 1
 			return BigDecimal.ONE;
 		}
-		return new BigDecimal(2)
-				.multiply(prosjekOcjena)
+		return new BigDecimal(2).multiply(prosjekOcjena)
 				.add(new BigDecimal(ocjenaZavrsnog.getVrijednost() + ocjenaObrane.getVrijednost()))
 				.divide(new BigDecimal(4));
 	}
 
 	@Override
 	public Student odrediNajuspjesnijegStudentaNaGodini(int godina) {
-		Ispit[] ispitiSaGodine = Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina)
-				.toArray(Ispit[]::new);
+		List<Ispit> ispitiSaGodine = this.getIspiti().stream().filter(x -> x.getDatumIVrijeme().getYear() == godina)
+				.collect(Collectors.toList());
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
-		Student najUspjesnijiStudent = this.getStudenati()[0];
+		Student najUspjesnijiStudent = this.getStudenati().get(0);
 		BigDecimal najboljiProsjek = BigDecimal.ZERO;
 		for (Student s : this.getStudenati()) {
-			Ispit[] ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
+			List<Ispit> ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
 			BigDecimal prosjekOcjena;
 			try {
 				prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispitiStudenta);

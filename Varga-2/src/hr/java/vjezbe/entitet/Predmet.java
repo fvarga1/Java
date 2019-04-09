@@ -1,12 +1,14 @@
 package hr.java.vjezbe.entitet;
 
+import java.util.List;
+
 public class Predmet {
 
 	private String sifra;
 	private String naziv;
 	private Integer brojEctsBodova;
 	private Profesor nositelj;
-	public Student student[];
+	public List<Student> studenti;
 
 	public Predmet(String sifra, String naziv, Integer brojEctsBodova, Profesor nositelj) {
 		this.sifra = sifra;
@@ -47,12 +49,11 @@ public class Predmet {
 		this.nositelj = nositelj;
 	}
 
-	public Student[] getStudent() {
-		return student;
+	public List<Student> getStudenti() {
+		return studenti;
 	}
 
-	public void setStudent(Student[] student) {
-		this.student = student;
+	public void setStudenti(List<Student> studenti) {
+		this.studenti = studenti;
 	}
-
 }

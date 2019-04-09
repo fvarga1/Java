@@ -2,6 +2,8 @@ package hr.java.vjezbe.entitet;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import hr.java.vjezbe.glavna.Glavna;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
@@ -9,19 +11,19 @@ import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
 
 public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski {
 
-	public FakultetRacunarstva(String nazivUstanove, Predmet[] predmeti, Profesor[] profesori, Student[] studenati,
-			Ispit[] ispiti) {
+	public FakultetRacunarstva(String nazivUstanove, List<Predmet> predmeti, List<Profesor> profesori, 
+			List<Student> studenati, List<Ispit> ispiti) {
 		super(nazivUstanove, predmeti, profesori, studenati, ispiti);
 	}
 
 	@Override
-	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Ocjena ocjenaDiplomskog,
+	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(List<Ispit> ispiti, Ocjena ocjenaDiplomskog,
 			Ocjena ocjenaObrane) {
 		BigDecimal prosjekOcjena = null;
 		try {
 			prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispiti);
 		} catch (NemoguceOdreditiProsjekStudentaException e) {
-			System.out.println("Student " + ispiti[0].getStudent().getIme() + " " + ispiti[0].getStudent().getPrezime() + 
+			System.out.println("Student " + ispiti.get(0).getStudent().getIme() + " " + ispiti.get(0).getStudent().getPrezime() + 
 					" zbog negativne ocjene na jednom od ispita ima prosjek „nedovoljan (1)!");
 			Glavna.logger.error(e.getMessage());
 			// Ukoliko student ima nepolozene ispite, konacna ocjena studija je 1
@@ -37,10 +39,10 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 	@Override
 	public Student odrediStudentaZaRektorovuNagradu() throws PostojiViseNajmladjihStudenataException {
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
-		Student najUspjesnijiStudent = this.getStudenati()[0];
+		Student najUspjesnijiStudent = this.getStudenati().get(0);
 		BigDecimal najboljiProsjek = BigDecimal.ZERO;
 		for (Student s : this.getStudenati()) {
-			Ispit[] ispitiStudenta = this.filtrirajIspitePoStudentu(this.getIspiti(), s);
+			List<Ispit> ispitiStudenta = this.filtrirajIspitePoStudentu(this.getIspiti(), s);
 			BigDecimal prosjekOcjena = BigDecimal.ZERO;
 			try {
 				prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispitiStudenta);
@@ -70,13 +72,14 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 
 	@Override
 	public Student odrediNajuspjesnijegStudentaNaGodini(int godina) {
-		Ispit[] ispitiSaGodine = (Ispit[]) Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina)
-				.toArray(Ispit[]::new);
+		List<Ispit> ispitiSaGodine = this.getIspiti().stream().filter(
+				x -> x.getDatumIVrijeme().getYear() == godina)
+				.collect(Collectors.toList());
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
-		Student najUspjesnijiStudent = this.getStudenati()[0];
+		Student najUspjesnijiStudent = this.getStudenati().get(0);
 		int brojIzvrsnihTop = Integer.MIN_VALUE;
 		for (Student s : this.getStudenati()) {
-			Ispit[] ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
+			List<Ispit> ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
 			int brojIzvrsnih = 0;
 			for (Ispit ispit : ispitiStudenta) {
 				if (ispit.getOcjena().getVrijednost() == 5) {

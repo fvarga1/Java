@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -45,32 +47,32 @@ public class Glavna {
 
 		logger.info("Program started");
 
-		Profesor[] poljeProfesora = new Profesor[BROJ_PROFESORA];
-		Predmet[] poljePredmeta = new Predmet[BROJ_PREDMETA];
-		Student[] poljeStudenata = new Student[BROJ_STUDENATA];
-		Ispit[] poljeIspita = new Ispit[BROJ_ISPITNIH_ROKOVA];
-		ObrazovnaUstanova[] obrazovneUstanove = new ObrazovnaUstanova[BROJ_OBRAZOVNIH_USTANOVA];
+		List<Profesor> poljeProfesora = new ArrayList<>();
+		List<Predmet> poljePredmeta = new ArrayList<>();
+		List<Student> poljeStudenata = new ArrayList<>();
+		List<Ispit> poljeIspita = new ArrayList<>();
+		List<ObrazovnaUstanova> obrazovneUstanove = new ArrayList<>();
 
 		for (int j = 0; j < BROJ_OBRAZOVNIH_USTANOVA; j++) {
 			System.out.println("Unesite podatke za " + (j + 1) + ". obrazovnu ustanovu");
 			for (int i = 0; i < BROJ_PROFESORA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". profesora:");
-				poljeProfesora[i] = unosProfesora(unos);
+				poljeProfesora.add(unosProfesora(unos));
 			}
 
 			for (int i = 0; i < BROJ_PREDMETA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". predmet:");
-				poljePredmeta[i] = unosPredmeta(unos, poljeProfesora);
+				poljePredmeta.add(unosPredmeta(unos, poljeProfesora));
 			}
 
 			for (int i = 0; i < BROJ_STUDENATA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". studenta:");
-				poljeStudenata[i] = unosStudenta(unos);
+				poljeStudenata.add(unosStudenta(unos));
 			}
 
 			for (int i = 0; i < BROJ_ISPITNIH_ROKOVA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". ispitni rok:");
-				poljeIspita[i] = unosIspita(unos, poljePredmeta, poljeStudenata);
+				poljeIspita.add(unosIspita(unos, poljePredmeta, poljeStudenata));
 			}
 
 			IspisiOdlicneStudente(poljeIspita);
@@ -99,7 +101,7 @@ public class Glavna {
 			case 1:
 				VeleucilisteJave vj = new VeleucilisteJave(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata,
 						poljeIspita);
-				obrazovneUstanove[j] = vj;
+				obrazovneUstanove.add(vj);
 				for (Student s : vj.getStudenati()) {
 					try {
 						vj.odrediProsjekOcjenaNaIspitima(poljeIspita);
@@ -197,7 +199,7 @@ public class Glavna {
 			case 2:
 				FakultetRacunarstva fr = new FakultetRacunarstva(nazivUstanove, poljePredmeta, poljeProfesora,
 						poljeStudenata, poljeIspita);
-				obrazovneUstanove[j] = fr;
+				obrazovneUstanove.add(fr);
 				for (Student s : fr.getStudenati()) {
 					int odabirOcjeneZavrsnog = 0;
 					do {
@@ -335,7 +337,7 @@ public class Glavna {
 	 * @return
 	 */
 
-	public static Predmet unosPredmeta(Scanner unos, Profesor[] poljeProfesora) {
+	public static Predmet unosPredmeta(Scanner unos, List<Profesor> poljeProfesora) {
 
 		System.out.println("Unesite širfu predmeta: ");
 		String sifra = unos.nextLine();
@@ -372,8 +374,9 @@ public class Glavna {
 		do {
 			ispravanUnos = true;
 			System.out.println("Odaberite profesora: ");
-			for (int i = 0; i < poljeProfesora.length; i++) {
-				System.out.println((i + 1) + ". " + poljeProfesora[i].getIme() + " " + poljeProfesora[i].getPrezime());
+			for (int i = 0; i < poljeProfesora.size(); i++) {
+				System.out.println(
+						(i + 1) + ". " + poljeProfesora.get(i).getIme() + " " + poljeProfesora.get(i).getPrezime());
 			}
 			try {
 				System.out.print("Odabir >> ");
@@ -385,17 +388,16 @@ public class Glavna {
 			} finally {
 				unos.nextLine();
 			}
-		} while (odabir < 1 || odabir > poljeProfesora.length);
+		} while (odabir < 1 || odabir > poljeProfesora.size());
 
-		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora[odabir - 1]);
+		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora.get(odabir - 1));
 
 		System.out.println("Unesite broj studenata za predmet u " + naziv + " ");
 		Integer brojstudenata = unos.nextInt();
 		unos.nextLine();
 
-		Student[] poljeStudenata = new Student[brojstudenata];
-
-		predmet.setStudent(poljeStudenata);
+		List<Student> poljeStudenata = new ArrayList<>();
+		predmet.setStudenti(poljeStudenata);
 
 		return predmet;
 	}
@@ -428,28 +430,29 @@ public class Glavna {
 	 * Metoda za unos Ispita
 	 */
 
-	public static Ispit unosIspita(Scanner unos, Predmet[] poljePredmeta, Student[] poljeStudenata) {
+	public static Ispit unosIspita(Scanner unos, List<Predmet> poljePredmeta, List<Student> poljeStudenata) {
 		Integer odabirPredmeta = 0;
 		do {
 			System.out.println("Odaberite predmet: ");
-			for (int i = 0; i < poljePredmeta.length; i++) {
-				System.out.println((i + 1) + ". " + poljePredmeta[i].getNaziv());
+			for (int i = 0; i < poljePredmeta.size(); i++) {
+				System.out.println((i + 1) + ". " + poljePredmeta.get(i).getNaziv());
 			}
 			System.out.print("Odabir >> ");
 			odabirPredmeta = unos.nextInt();
 			unos.nextLine();
-		} while (odabirPredmeta < 1 || odabirPredmeta > poljePredmeta.length);
+		} while (odabirPredmeta < 1 || odabirPredmeta > poljePredmeta.size());
 
 		Integer odabirStudenta = 0;
 		do {
 			System.out.println("Odaberite studenta: ");
-			for (int i = 0; i < poljeStudenata.length; i++) {
-				System.out.println((i + 1) + ". " + poljeStudenata[i].getIme() + " " + poljeStudenata[i].getPrezime());
+			for (int i = 0; i < poljeStudenata.size(); i++) {
+				System.out.println(
+						(i + 1) + ". " + poljeStudenata.get(i).getIme() + " " + poljeStudenata.get(i).getPrezime());
 			}
 			System.out.print("Odabir >> ");
 			odabirStudenta = unos.nextInt();
 			unos.nextLine();
-		} while (odabirStudenta < 0 || odabirStudenta > poljeStudenata.length);
+		} while (odabirStudenta < 0 || odabirStudenta > poljeStudenata.size());
 
 		int odabirOcjeneNaIspitu = 0;
 		do {
@@ -505,13 +508,13 @@ public class Glavna {
 			}
 		} while (!ispravanFormat);
 
-		Ispit ispit = new Ispit(poljePredmeta[odabirPredmeta - 1], poljeStudenata[odabirStudenta - 1], ocjenaNaIspitu,
+		Ispit ispit = new Ispit(poljePredmeta.get(odabirPredmeta - 1), poljeStudenata.get(odabirStudenta - 1), ocjenaNaIspitu,
 				vrijemeIspita);
 
 		return ispit;
 	}
 
-	private static void IspisiOdlicneStudente(Ispit[] ispitniRokovi) {
+	private static void IspisiOdlicneStudente(List<Ispit> ispitniRokovi) {
 		for (Ispit ispit : ispitniRokovi) {
 			Student s = ispit.getStudent();
 			String np = ispit.getPredmet().getNaziv();

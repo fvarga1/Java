@@ -28,5 +28,4 @@ public class Student extends Osoba {
 	public void setDamtumRodjenja(LocalDate damtumRodjenja) {
 		this.damtumRodjenja = damtumRodjenja;
 	}
-
 }
