@@ -5,9 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -56,6 +58,7 @@ public class Glavna {
 		List<Student> poljeStudenata = new ArrayList<>();
 		List<Ispit> poljeIspita = new ArrayList<>();
 		List<ObrazovnaUstanova> obrazovneUstanove = new ArrayList<>();
+		Map<Profesor, List<Predmet>> mapaProfesorPredmeti = new HashMap<>();
 
 		for (int j = 0; j < BROJ_OBRAZOVNIH_USTANOVA; j++) {
 			System.out.println("Unesite podatke za " + (j + 1) + ". obrazovnu ustanovu");
@@ -66,7 +69,7 @@ public class Glavna {
 
 			for (int i = 0; i < BROJ_PREDMETA; i++) {
 				System.out.println("Unesite " + (i + 1) + ". predmet:");
-				poljePredmeta.add(unosPredmeta(unos, poljeProfesora));
+				poljePredmeta.add(unosPredmeta(unos, poljeProfesora, mapaProfesorPredmeti));
 			}
 
 			for (int i = 0; i < BROJ_STUDENATA; i++) {
@@ -81,6 +84,7 @@ public class Glavna {
 
 			IspisiOdlicneStudente(poljeIspita);
 			IspisiStudentePoPredmetima(poljePredmeta);
+			IspisiPredmetePoProfesorima(mapaProfesorPredmeti);
 
 			int odabir = 0;
 			// Dok god nije ispravan format vrtim do while petlju
@@ -343,7 +347,8 @@ public class Glavna {
 	 * @return
 	 */
 
-	public static Predmet unosPredmeta(Scanner unos, List<Profesor> poljeProfesora) {
+	public static Predmet unosPredmeta(Scanner unos, List<Profesor> poljeProfesora,
+			Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
 
 		System.out.println("Unesite širfu predmeta: ");
 		String sifra = unos.nextLine();
@@ -397,6 +402,16 @@ public class Glavna {
 		} while (odabir < 1 || odabir > poljeProfesora.size());
 
 		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora.get(odabir - 1));
+
+		if (mapaProfesorPredmeti.containsKey(predmet.getNositelj())) {
+			List<Predmet> ps = mapaProfesorPredmeti.get(predmet.getNositelj());
+			ps.add(predmet);
+			mapaProfesorPredmeti.put(predmet.getNositelj(), ps);
+		} else {
+			List<Predmet> ps = new ArrayList<>();
+			ps.add(predmet);
+			mapaProfesorPredmeti.put(predmet.getNositelj(), ps);
+		}
 
 //		System.out.println("Unesite broj studenata za predmet u " + naziv + " ");
 //		Integer brojstudenata = unos.nextInt();
@@ -537,5 +552,10 @@ public class Glavna {
 				System.out.println(s);
 			}
 		}
+	}
+	
+	private static void IspisiPredmetePoProfesorima(Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
+		// TODO IZGUGLAJ KAKO ISPISATI MAPU, I ONDA TI ISPISI PROFESORE I PREDMETE
+		// KORISNO CE TI BITI DA DODAS TOSTRING METODE U PROFESOR I PREDMET AKO VEC NE POSTOJE
 	}
 }
