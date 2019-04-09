@@ -6,10 +6,10 @@ public class Ispit {
 
 	private Predmet predmet;
 	private Student student;
-	private Integer ocjena;
+	private Ocjena ocjena;
 	private LocalDateTime datumIVrijeme;
 
-	public Ispit(Predmet predmet, Student student, Integer ocjena, LocalDateTime datumIVrijeme) {
+	public Ispit(Predmet predmet, Student student, Ocjena ocjena, LocalDateTime datumIVrijeme) {
 		this.predmet = predmet;
 		this.student = student;
 		this.ocjena = ocjena;
@@ -32,11 +32,11 @@ public class Ispit {
 		this.student = student;
 	}
 
-	public Integer getOcjena() {
+	public Ocjena getOcjena() {
 		return ocjena;
 	}
 
-	public void setOcjena(Integer ocjena) {
+	public void setOcjena(Ocjena ocjena) {
 		this.ocjena = ocjena;
 	}
 
@@ -49,7 +49,7 @@ public class Ispit {
 	}
 
 	public String toString() {
-		return "Student " + student.getIme() + " " + student.getPrezime() + " ocjena " + ocjena
+		return "Student " + student.getIme() + " " + student.getPrezime() + " ocjena " + ocjena.getVrijednost()
 				+ " naziv predmeta " + predmet.getNaziv();
 	}
 }

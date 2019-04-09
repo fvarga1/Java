@@ -7,14 +7,14 @@ import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 
 public interface Visokoskolska {
 
-	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Integer ocjenaZavrsnog,
-			Integer ocjenaObrane);
+	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Ocjena ocjenaZavrsnog,
+			Ocjena ocjenaObrane);
 
 	public default BigDecimal odrediProsjekOcjenaNaIspitima(Ispit[] ispiti) throws NemoguceOdreditiProsjekStudentaException {
 		int zbrojPozitivnihOcjena = 0;
 		int brojOcjena = 0;
 		for (Ispit ispit : filtrirajPolozeneIspite(ispiti)) {
-			zbrojPozitivnihOcjena += ispit.getOcjena();
+			zbrojPozitivnihOcjena += ispit.getOcjena().getVrijednost();
 			brojOcjena++;
 		}
 		float prosjek = (float) zbrojPozitivnihOcjena / brojOcjena;
@@ -26,7 +26,7 @@ public interface Visokoskolska {
 	}
 
 	private Ispit[] filtrirajPolozeneIspite(Ispit[] ispiti) throws NemoguceOdreditiProsjekStudentaException {
-		Ispit[] nepolozeniIspiti = Arrays.stream(ispiti).filter(x -> x.getOcjena() == 1).toArray(Ispit[]::new);
+		Ispit[] nepolozeniIspiti = Arrays.stream(ispiti).filter(x -> x.getOcjena().getVrijednost() == 1).toArray(Ispit[]::new);
 		if (nepolozeniIspiti.length > 0) {
 			StringBuilder stringBuilder = new StringBuilder();
 			for (Ispit ispit : nepolozeniIspiti) {
@@ -34,6 +34,6 @@ public interface Visokoskolska {
 			}
 			throw new NemoguceOdreditiProsjekStudentaException(stringBuilder.toString());
 		}
-		return Arrays.stream(ispiti).filter(x -> x.getOcjena() > 1).toArray(Ispit[]::new);
+		return Arrays.stream(ispiti).filter(x -> x.getOcjena().getVrijednost() > 1).toArray(Ispit[]::new);
 	}
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import hr.java.vjezbe.entitet.FakultetRacunarstva;
 import hr.java.vjezbe.entitet.Ispit;
 import hr.java.vjezbe.entitet.ObrazovnaUstanova;
+import hr.java.vjezbe.entitet.Ocjena;
 import hr.java.vjezbe.entitet.Predmet;
 import hr.java.vjezbe.entitet.Profesor;
 import hr.java.vjezbe.entitet.Student;
@@ -107,30 +108,18 @@ public class Glavna {
 						// Ukoliko student ima nepolozene ispite, ne unosimo za njega ocjene zavrsnog
 						continue;
 					}
-					int ocjenaZavrsnog = 0;
+					int odabirOcjeneZavrsnog = 0;
 					do {
 						ispravanFormat = true;
-						System.out.println(
-								"Unesite ocjenu završnog rada za studenta " + s.getIme() + " " + s.getPrezime() + ":");
-						try {
-							ocjenaZavrsnog = unos.nextInt();
-						} catch (InputMismatchException e) {
-							System.out.println(
-									"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
-							logger.error(e.getMessage());
-							ispravanFormat = false;
-						} finally {
-							unos.nextLine();
-						}
-						unos.nextLine();
-					} while (!ispravanFormat && (ocjenaZavrsnog < 1 || ocjenaZavrsnog > 5));
-					int ocjenaObraneZavrsnog = 0;
-					do {
-						ispravanFormat = true;
-						System.out.println("Unesite ocjenu obrane završnog rada za studenta " + s.getIme() + " "
+						System.out.println("Odaberite ocjenu zavrsnog rada za studenta " + s.getIme() + " "
 								+ s.getPrezime() + ":");
+						int redniBroj = 1;
+						for (Ocjena ocjena : Ocjena.values()) {
+							System.out.println(redniBroj + ". " + ocjena.getOpis());
+							redniBroj++;
+						}
 						try {
-							ocjenaObraneZavrsnog = unos.nextInt();
+							odabirOcjeneZavrsnog = unos.nextInt();
 						} catch (InputMismatchException e) {
 							System.out.println(
 									"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
@@ -139,7 +128,64 @@ public class Glavna {
 						} finally {
 							unos.nextLine();
 						}
-					} while (!ispravanFormat && (ocjenaObraneZavrsnog < 1 || ocjenaObraneZavrsnog > 5));
+					} while (!ispravanFormat && (odabirOcjeneZavrsnog < 1 || odabirOcjeneZavrsnog > 5));
+					Ocjena ocjenaZavrsnog = null;
+					switch (odabirOcjeneZavrsnog) {
+					case 2:
+						ocjenaZavrsnog = Ocjena.DOVLJAN;
+						break;
+					case 3:
+						ocjenaZavrsnog = Ocjena.DOBAR;
+						break;
+					case 4:
+						ocjenaZavrsnog = Ocjena.VRLO_DOBAR;
+						break;
+					case 5:
+						ocjenaZavrsnog = Ocjena.IZVRSTAN;
+						break;
+					default:
+						ocjenaZavrsnog = Ocjena.NEDOVOLJAN;
+						break;
+					}
+					int odabirOcjeneObraneZavrsnog = 0;
+					do {
+						ispravanFormat = true;
+						System.out.println("Odaberite ocjenu obrane zavrsnog rada za studenta " + s.getIme() + " "
+								+ s.getPrezime() + ":");
+						int redniBroj = 1;
+						for (Ocjena ocjena : Ocjena.values()) {
+							System.out.println(redniBroj + ". " + ocjena.getOpis());
+							redniBroj++;
+						}
+						try {
+							odabirOcjeneObraneZavrsnog = unos.nextInt();
+						} catch (InputMismatchException e) {
+							System.out.println(
+									"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
+							logger.error(e.getMessage());
+							ispravanFormat = false;
+						} finally {
+							unos.nextLine();
+						}
+					} while (!ispravanFormat && (odabirOcjeneObraneZavrsnog < 1 || odabirOcjeneObraneZavrsnog > 5));
+					Ocjena ocjenaObraneZavrsnog = null;
+					switch (odabirOcjeneObraneZavrsnog) {
+					case 2:
+						ocjenaObraneZavrsnog = Ocjena.DOVLJAN;
+						break;
+					case 3:
+						ocjenaObraneZavrsnog = Ocjena.DOBAR;
+						break;
+					case 4:
+						ocjenaObraneZavrsnog = Ocjena.VRLO_DOBAR;
+						break;
+					case 5:
+						ocjenaObraneZavrsnog = Ocjena.IZVRSTAN;
+						break;
+					default:
+						ocjenaObraneZavrsnog = Ocjena.NEDOVOLJAN;
+						break;
+					}
 					System.out.println("Konacna ocjena studija studenta " + s.getIme() + " " + s.getPrezime() + ":"
 							+ vj.izracunajKonacnuOcjenuStudijaZaStudenta(poljeIspita, ocjenaZavrsnog,
 									ocjenaObraneZavrsnog));
@@ -153,14 +199,84 @@ public class Glavna {
 						poljeStudenata, poljeIspita);
 				obrazovneUstanove[j] = fr;
 				for (Student s : fr.getStudenati()) {
-					System.out.println(
-							"Unesite ocjenu završnog rada za studenta " + s.getIme() + " " + s.getPrezime() + ":");
-					int ocjenaZavrsnog = unos.nextInt();
-					unos.nextLine();
-					System.out.println("Unesite ocjenu obrane završnog rada za studenta " + s.getIme() + " "
-							+ s.getPrezime() + ":");
-					int ocjenaObraneZavrsnog = unos.nextInt();
-					unos.nextLine();
+					int odabirOcjeneZavrsnog = 0;
+					do {
+						ispravanFormat = true;
+						System.out.println("Odaberite ocjenu zavrsnog rada za studenta " + s.getIme() + " "
+								+ s.getPrezime() + ":");
+						int redniBroj = 1;
+						for (Ocjena ocjena : Ocjena.values()) {
+							System.out.println(redniBroj + ". " + ocjena.getOpis());
+							redniBroj++;
+						}
+						try {
+							odabirOcjeneZavrsnog = unos.nextInt();
+						} catch (InputMismatchException e) {
+							System.out.println(
+									"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
+							logger.error(e.getMessage());
+							ispravanFormat = false;
+						} finally {
+							unos.nextLine();
+						}
+					} while (!ispravanFormat && (odabirOcjeneZavrsnog < 1 || odabirOcjeneZavrsnog > 5));
+					Ocjena ocjenaZavrsnog = null;
+					switch (odabirOcjeneZavrsnog) {
+					case 2:
+						ocjenaZavrsnog = Ocjena.DOVLJAN;
+						break;
+					case 3:
+						ocjenaZavrsnog = Ocjena.DOBAR;
+						break;
+					case 4:
+						ocjenaZavrsnog = Ocjena.VRLO_DOBAR;
+						break;
+					case 5:
+						ocjenaZavrsnog = Ocjena.IZVRSTAN;
+						break;
+					default:
+						ocjenaZavrsnog = Ocjena.NEDOVOLJAN;
+						break;
+					}
+					int odabirOcjeneObraneZavrsnog = 0;
+					do {
+						ispravanFormat = true;
+						System.out.println("Odaberite ocjenu obrane zavrsnog rada za studenta " + s.getIme() + " "
+								+ s.getPrezime() + ":");
+						int redniBroj = 1;
+						for (Ocjena ocjena : Ocjena.values()) {
+							System.out.println(redniBroj + ". " + ocjena.getOpis());
+							redniBroj++;
+						}
+						try {
+							odabirOcjeneObraneZavrsnog = unos.nextInt();
+						} catch (InputMismatchException e) {
+							System.out.println(
+									"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
+							logger.error(e.getMessage());
+							ispravanFormat = false;
+						} finally {
+							unos.nextLine();
+						}
+					} while (!ispravanFormat && (odabirOcjeneObraneZavrsnog < 1 || odabirOcjeneObraneZavrsnog > 5));
+					Ocjena ocjenaObraneZavrsnog = null;
+					switch (odabirOcjeneObraneZavrsnog) {
+					case 2:
+						ocjenaObraneZavrsnog = Ocjena.DOVLJAN;
+						break;
+					case 3:
+						ocjenaObraneZavrsnog = Ocjena.DOBAR;
+						break;
+					case 4:
+						ocjenaObraneZavrsnog = Ocjena.VRLO_DOBAR;
+						break;
+					case 5:
+						ocjenaObraneZavrsnog = Ocjena.IZVRSTAN;
+						break;
+					default:
+						ocjenaObraneZavrsnog = Ocjena.NEDOVOLJAN;
+						break;
+					}
 					System.out.println("Konacna ocjena studija studenta " + s.getIme() + " " + s.getPrezime() + ":"
 							+ fr.izracunajKonacnuOcjenuStudijaZaStudenta(poljeIspita, ocjenaZavrsnog,
 									ocjenaObraneZavrsnog));
@@ -243,8 +359,8 @@ public class Glavna {
 			try {
 				brojEctsBodova = unos.nextInt();
 			} catch (InputMismatchException e) {
-				System.out
-						.println("Unijeli ste neispravan broj ECTS bodova. Molimo unesite numerički broj ECTS bodova.");
+				System.out.println(
+						"Unijeli ste neispravan broj ECTS bodova. Molimo unesite numerički broj ECTS bodova.");
 				logger.error(e.getMessage());
 				ispravanUnos = false;
 			} finally {
@@ -335,9 +451,44 @@ public class Glavna {
 			unos.nextLine();
 		} while (odabirStudenta < 0 || odabirStudenta > poljeStudenata.length);
 
-		System.out.print("Unesite ocjenu na ispitu (1-5):");
-		Integer ocjena = unos.nextInt();
-		unos.nextLine();
+		int odabirOcjeneNaIspitu = 0;
+		do {
+			ispravanFormat = true;
+			System.out.println("Odaberite ocjenu studenta na ispitu:");
+			int redniBroj = 1;
+			for (Ocjena ocjena : Ocjena.values()) {
+				System.out.println(redniBroj + ". " + ocjena.getOpis());
+				redniBroj++;
+			}
+			try {
+				odabirOcjeneNaIspitu = unos.nextInt();
+			} catch (InputMismatchException e) {
+				System.out.println(
+						"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
+				logger.error(e.getMessage());
+				ispravanFormat = false;
+			} finally {
+				unos.nextLine();
+			}
+		} while (!ispravanFormat && (odabirOcjeneNaIspitu < 1 || odabirOcjeneNaIspitu > 5));
+		Ocjena ocjenaNaIspitu = null;
+		switch (odabirOcjeneNaIspitu) {
+		case 2:
+			ocjenaNaIspitu = Ocjena.DOVLJAN;
+			break;
+		case 3:
+			ocjenaNaIspitu = Ocjena.DOBAR;
+			break;
+		case 4:
+			ocjenaNaIspitu = Ocjena.VRLO_DOBAR;
+			break;
+		case 5:
+			ocjenaNaIspitu = Ocjena.IZVRSTAN;
+			break;
+		default:
+			ocjenaNaIspitu = Ocjena.NEDOVOLJAN;
+			break;
+		}
 		LocalDateTime vrijemeIspita = null;
 		do {
 			ispravanFormat = true;
@@ -354,7 +505,7 @@ public class Glavna {
 			}
 		} while (!ispravanFormat);
 
-		Ispit ispit = new Ispit(poljePredmeta[odabirPredmeta - 1], poljeStudenata[odabirStudenta - 1], ocjena,
+		Ispit ispit = new Ispit(poljePredmeta[odabirPredmeta - 1], poljeStudenata[odabirStudenta - 1], ocjenaNaIspitu,
 				vrijemeIspita);
 
 		return ispit;
@@ -364,12 +515,10 @@ public class Glavna {
 		for (Ispit ispit : ispitniRokovi) {
 			Student s = ispit.getStudent();
 			String np = ispit.getPredmet().getNaziv();
-			if (ispit.getOcjena() == 5) {
+			if (ispit.getOcjena().getVrijednost() == 5) {
 				System.out.println("Student " + s.getIme() + " " + s.getPrezime()
 						+ " je ostvario ocjenu 'izvrstan' na predmetu '" + np + "'");
 			}
 		}
-
 	}
-
 }

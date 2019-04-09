@@ -14,8 +14,8 @@ public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska
 	}
 
 	@Override
-	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Integer ocjenaZavrsnog,
-			Integer ocjenaObrane) {
+	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Ocjena ocjenaZavrsnog,
+			Ocjena ocjenaObrane) {
 		BigDecimal prosjekOcjena = null;
 		try {
 			prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispiti);
@@ -26,13 +26,14 @@ public class VeleucilisteJave extends ObrazovnaUstanova implements Visokoskolska
 		}
 		return new BigDecimal(2)
 				.multiply(prosjekOcjena)
-				.add(new BigDecimal(ocjenaZavrsnog + ocjenaObrane))
+				.add(new BigDecimal(ocjenaZavrsnog.getVrijednost() + ocjenaObrane.getVrijednost()))
 				.divide(new BigDecimal(4));
 	}
 
 	@Override
 	public Student odrediNajuspjesnijegStudentaNaGodini(int godina) {
-		Ispit[] ispitiSaGodine = Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina).toArray(Ispit[]::new);
+		Ispit[] ispitiSaGodine = Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina)
+				.toArray(Ispit[]::new);
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
 		Student najUspjesnijiStudent = this.getStudenati()[0];
 		BigDecimal najboljiProsjek = BigDecimal.ZERO;

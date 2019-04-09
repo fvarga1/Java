@@ -15,8 +15,8 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 	}
 
 	@Override
-	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Integer ocjenaDiplomskog,
-			Integer ocjenaObrane) {
+	public BigDecimal izracunajKonacnuOcjenuStudijaZaStudenta(Ispit[] ispiti, Ocjena ocjenaDiplomskog,
+			Ocjena ocjenaObrane) {
 		BigDecimal prosjekOcjena = null;
 		try {
 			prosjekOcjena = this.odrediProsjekOcjenaNaIspitima(ispiti);
@@ -29,8 +29,8 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 		}
 		return new BigDecimal(3)
 				.multiply(prosjekOcjena)
-				.add(new BigDecimal(ocjenaDiplomskog))
-				.add(new BigDecimal(ocjenaObrane))
+				.add(new BigDecimal(ocjenaDiplomskog.getVrijednost()))
+				.add(new BigDecimal(ocjenaObrane.getVrijednost()))
 				.divide(new BigDecimal(5));
 	}
 
@@ -70,7 +70,8 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 
 	@Override
 	public Student odrediNajuspjesnijegStudentaNaGodini(int godina) {
-		Ispit[] ispitiSaGodine = (Ispit[]) Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina).toArray(Ispit[]::new);
+		Ispit[] ispitiSaGodine = (Ispit[]) Arrays.stream(this.getIspiti()).filter(x -> x.getDatumIVrijeme().getYear() == godina)
+				.toArray(Ispit[]::new);
 		// Postavljam defaultno da je prvi student u arrayu najuspjesniji
 		Student najUspjesnijiStudent = this.getStudenati()[0];
 		int brojIzvrsnihTop = Integer.MIN_VALUE;
@@ -78,7 +79,7 @@ public class FakultetRacunarstva extends ObrazovnaUstanova implements Diplomski 
 			Ispit[] ispitiStudenta = this.filtrirajIspitePoStudentu(ispitiSaGodine, s);
 			int brojIzvrsnih = 0;
 			for (Ispit ispit : ispitiStudenta) {
-				if (ispit.getOcjena() == 5) {
+				if (ispit.getOcjena().getVrijednost() == 5) {
 					brojIzvrsnih++;
 				}
 			}
