@@ -10,6 +10,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import hr.java.vjezbe.entitet.Student;
 import hr.java.vjezbe.entitet.VeleucilisteJave;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
+import hr.java.vjezbe.sortiranje.StudentSorter;
 
 public class Glavna {
 
@@ -78,6 +80,8 @@ public class Glavna {
 			}
 
 			IspisiOdlicneStudente(poljeIspita);
+			IspisiStudentePoPredmetima(poljePredmeta);
+
 			int odabir = 0;
 			// Dok god nije ispravan format vrtim do while petlju
 			do {
@@ -398,7 +402,7 @@ public class Glavna {
 //		Integer brojstudenata = unos.nextInt();
 //		unos.nextLine();
 
-		Set<Student> poljeStudenata = new HashSet<>();
+		Set<Student> poljeStudenata = new TreeSet<>(new StudentSorter());
 		predmet.setStudenti(poljeStudenata);
 
 		return predmet;
@@ -510,8 +514,8 @@ public class Glavna {
 			}
 		} while (!ispravanFormat);
 
-		Ispit ispit = new Ispit(poljePredmeta.get(odabirPredmeta - 1), poljeStudenata.get(odabirStudenta - 1), ocjenaNaIspitu,
-				vrijemeIspita);
+		Ispit ispit = new Ispit(poljePredmeta.get(odabirPredmeta - 1), poljeStudenata.get(odabirStudenta - 1),
+				ocjenaNaIspitu, vrijemeIspita);
 
 		return ispit;
 	}
@@ -523,6 +527,14 @@ public class Glavna {
 			if (ispit.getOcjena().getVrijednost() == 5) {
 				System.out.println("Student " + s.getIme() + " " + s.getPrezime()
 						+ " je ostvario ocjenu 'izvrstan' na predmetu '" + np + "'");
+			}
+		}
+	}
+
+	private static void IspisiStudentePoPredmetima(List<Predmet> poljePredmeta) {
+		for (Predmet predmet : poljePredmeta) {
+			for (Student s : predmet.getStudenti()) {
+				System.out.println(s);
 			}
 		}
 	}

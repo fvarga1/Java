@@ -28,6 +28,13 @@ public class Student extends Osoba {
 	public void setDamtumRodjenja(LocalDate damtumRodjenja) {
 		this.damtumRodjenja = damtumRodjenja;
 	}
+	
+	
+
+	@Override
+	public String toString() {
+		return this.getIme() + " " + this.getPrezime();
+	}
 
 	@Override
 	public int hashCode() {
