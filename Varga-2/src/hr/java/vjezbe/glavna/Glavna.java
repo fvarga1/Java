@@ -5,9 +5,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -392,11 +394,11 @@ public class Glavna {
 
 		Predmet predmet = new Predmet(sifra, naziv, brojEctsBodova, poljeProfesora.get(odabir - 1));
 
-		System.out.println("Unesite broj studenata za predmet u " + naziv + " ");
-		Integer brojstudenata = unos.nextInt();
-		unos.nextLine();
+//		System.out.println("Unesite broj studenata za predmet u " + naziv + " ");
+//		Integer brojstudenata = unos.nextInt();
+//		unos.nextLine();
 
-		List<Student> poljeStudenata = new ArrayList<>();
+		Set<Student> poljeStudenata = new HashSet<>();
 		predmet.setStudenti(poljeStudenata);
 
 		return predmet;

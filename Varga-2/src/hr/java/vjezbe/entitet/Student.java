@@ -28,4 +28,21 @@ public class Student extends Osoba {
 	public void setDamtumRodjenja(LocalDate damtumRodjenja) {
 		this.damtumRodjenja = damtumRodjenja;
 	}
+
+	@Override
+	public int hashCode() {
+		// radim proizvoljno
+		int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.jmbag == null) ? 0 : this.jmbag.hashCode());
+		result = prime * result + ((this.getIme() == null) ? 0 : this.getIme().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+        if (obj == null) return false;
+        
+        return ((this.jmbag).equals(((Student)obj).getJmbag()));
+	}	
 }

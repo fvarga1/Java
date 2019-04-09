@@ -1,6 +1,6 @@
 package hr.java.vjezbe.entitet;
 
-import java.util.List;
+import java.util.Set;
 
 public class Predmet {
 
@@ -8,7 +8,7 @@ public class Predmet {
 	private String naziv;
 	private Integer brojEctsBodova;
 	private Profesor nositelj;
-	public List<Student> studenti;
+	public Set<Student> studenti;
 
 	public Predmet(String sifra, String naziv, Integer brojEctsBodova, Profesor nositelj) {
 		this.sifra = sifra;
@@ -49,11 +49,11 @@ public class Predmet {
 		this.nositelj = nositelj;
 	}
 
-	public List<Student> getStudenti() {
+	public Set<Student> getStudenti() {
 		return studenti;
 	}
 
-	public void setStudenti(List<Student> studenti) {
+	public void setStudenti(Set<Student> studenti) {
 		this.studenti = studenti;
 	}
 }
