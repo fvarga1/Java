@@ -24,6 +24,7 @@ import hr.java.vjezbe.entitet.Ocjena;
 import hr.java.vjezbe.entitet.Predmet;
 import hr.java.vjezbe.entitet.Profesor;
 import hr.java.vjezbe.entitet.Student;
+import hr.java.vjezbe.entitet.Sveuciliste;
 import hr.java.vjezbe.entitet.VeleucilisteJave;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
@@ -57,7 +58,7 @@ public class Glavna {
 		List<Predmet> poljePredmeta = new ArrayList<>();
 		List<Student> poljeStudenata = new ArrayList<>();
 		List<Ispit> poljeIspita = new ArrayList<>();
-		List<ObrazovnaUstanova> obrazovneUstanove = new ArrayList<>();
+		Sveuciliste<ObrazovnaUstanova> sveuciliste = new Sveuciliste<>();
 		Map<Profesor, List<Predmet>> mapaProfesorPredmeti = new HashMap<>();
 
 		for (int j = 0; j < BROJ_OBRAZOVNIH_USTANOVA; j++) {
@@ -110,9 +111,8 @@ public class Glavna {
 
 			switch (odabir) {
 			case 1:
-				VeleucilisteJave vj = new VeleucilisteJave(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata,
-						poljeIspita);
-				obrazovneUstanove.add(vj);
+				sveuciliste.dodajObrazovnuUstanovu(new VeleucilisteJave(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata, poljeIspita));
+				VeleucilisteJave vj = (VeleucilisteJave) sveuciliste.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size()-1);
 				for (Student s : vj.getStudenati()) {
 					try {
 						vj.odrediProsjekOcjenaNaIspitima(poljeIspita);
@@ -208,9 +208,9 @@ public class Glavna {
 						+ " JMBAG: " + naj2018.getJmbag());
 				break;
 			case 2:
-				FakultetRacunarstva fr = new FakultetRacunarstva(nazivUstanove, poljePredmeta, poljeProfesora,
-						poljeStudenata, poljeIspita);
-				obrazovneUstanove.add(fr);
+				sveuciliste.dodajObrazovnuUstanovu(new FakultetRacunarstva(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata, poljeIspita));
+				FakultetRacunarstva fr = (FakultetRacunarstva) sveuciliste.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size()-1);
+				sveuciliste.dodajObrazovnuUstanovu(fr);
 				for (Student s : fr.getStudenati()) {
 					int odabirOcjeneZavrsnog = 0;
 					do {
