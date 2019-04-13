@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import hr.java.vjezbe.entitet.Sveuciliste;
 import hr.java.vjezbe.entitet.VeleucilisteJave;
 import hr.java.vjezbe.iznimke.NemoguceOdreditiProsjekStudentaException;
 import hr.java.vjezbe.iznimke.PostojiViseNajmladjihStudenataException;
+import hr.java.vjezbe.sortiranje.BrojStudenataSorter;
 import hr.java.vjezbe.sortiranje.StudentSorter;
 
 public class Glavna {
@@ -314,6 +316,8 @@ public class Glavna {
 				break;
 			}
 		}
+		
+		IspisiNajnapucenijeSveuciliste(sveuciliste);
 	}
 
 	private static void IsprazniKolekcije(List<Profesor> poljeProfesora, List<Predmet> poljePredmeta,
@@ -570,5 +574,11 @@ public class Glavna {
 		// KORISNO CE TI BITI DA DODAS TOSTRING METODE U PROFESOR I PREDMET AKO VEC NE POSTOJE
 		
 		// Ne Moze
+	}
+	
+	private static void IspisiNajnapucenijeSveuciliste(Sveuciliste<ObrazovnaUstanova> sveuciliste) {
+		BrojStudenataSorter comp = new BrojStudenataSorter();
+		ObrazovnaUstanova ou = sveuciliste.getObrazovneUstanove().stream().sorted((x, y) -> comp.compare(x, y)).collect(Collectors.toList()).get(0);
+		System.out.println(ou.getNazivUstanove() + " ima najvise studenata");
 	}
 }
