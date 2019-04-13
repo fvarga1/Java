@@ -568,5 +568,7 @@ public class Glavna {
 	private static void IspisiPredmetePoProfesorima(Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
 		// TODO IZGUGLAJ KAKO ISPISATI MAPU, I ONDA TI ISPISI PROFESORE I PREDMETE
 		// KORISNO CE TI BITI DA DODAS TOSTRING METODE U PROFESOR I PREDMET AKO VEC NE POSTOJE
+		
+		// Moze
 	}
 }
