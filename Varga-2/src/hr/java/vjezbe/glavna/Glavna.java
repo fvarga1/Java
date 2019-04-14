@@ -587,11 +587,19 @@ public class Glavna {
 	}
 
 	private static void IspisiStudentePoPredmetima(List<Predmet> poljePredmeta) {
+		long start = System.currentTimeMillis();
 		for (Predmet predmet : poljePredmeta) {
 			for (Student s : predmet.getStudenti()) {
-				System.out.println(s);
+				System.out.print("");
 			}
 		}
+		long end = System.currentTimeMillis();
+		System.out.println("For : " + ((end - start) / 1000));
+		
+		long startLambda = System.currentTimeMillis();
+		poljePredmeta.forEach(x -> x.getStudenti().forEach(System.out::println));
+		long endLambda = System.currentTimeMillis();
+		System.out.println("For : " + ((endLambda - startLambda) / 1000));
 	}
 
 	private static void IspisiPredmetePoProfesorima(Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
