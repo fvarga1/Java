@@ -113,10 +113,13 @@ public class Glavna {
 
 			switch (odabir) {
 			case 1:
-				sveuciliste.dodajObrazovnuUstanovu(new VeleucilisteJave(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata, poljeIspita));
-				VeleucilisteJave vj = (VeleucilisteJave) sveuciliste.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size()-1);
+				sveuciliste.dodajObrazovnuUstanovu(new VeleucilisteJave(nazivUstanove, poljePredmeta, poljeProfesora,
+						poljeStudenata, poljeIspita));
+				VeleucilisteJave vj = (VeleucilisteJave) sveuciliste
+						.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size() - 1);
 				for (Student s : vj.getStudenati()) {
 					try {
+						List<Ispit> ispitiStudenta = filtrirajIspitePoStudentu(poljeIspita, s);
 						vj.odrediProsjekOcjenaNaIspitima(poljeIspita);
 					} catch (NemoguceOdreditiProsjekStudentaException e) {
 						System.out.println(e.getMessage());
@@ -210,8 +213,10 @@ public class Glavna {
 						+ " JMBAG: " + naj2018.getJmbag());
 				break;
 			case 2:
-				sveuciliste.dodajObrazovnuUstanovu(new FakultetRacunarstva(nazivUstanove, poljePredmeta, poljeProfesora, poljeStudenata, poljeIspita));
-				FakultetRacunarstva fr = (FakultetRacunarstva) sveuciliste.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size()-1);
+				sveuciliste.dodajObrazovnuUstanovu(new FakultetRacunarstva(nazivUstanove, poljePredmeta, poljeProfesora,
+						poljeStudenata, poljeIspita));
+				FakultetRacunarstva fr = (FakultetRacunarstva) sveuciliste
+						.dohvatiObrazovnuUstanovu(sveuciliste.getObrazovneUstanove().size() - 1);
 				sveuciliste.dodajObrazovnuUstanovu(fr);
 				for (Student s : fr.getStudenati()) {
 					int odabirOcjeneZavrsnog = 0;
@@ -316,13 +321,33 @@ public class Glavna {
 				break;
 			}
 		}
-		
+
 		IspisiNajnapucenijeSveuciliste(sveuciliste);
+	}
+
+	private static List<Ispit> filtrirajIspitePoStudentu(List<Ispit> poljeIspita, Student s) {
+		long start = System.currentTimeMillis();
+		List<Ispit> ispiti = new ArrayList<>();
+		for (Ispit ispit : poljeIspita) {
+			if (ispit.getStudent().getJmbag() == s.getJmbag()) {
+				ispiti.add(ispit);
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("For filter : " + ((end - start) / 1000));
+
+		long startLambda = System.currentTimeMillis();
+		List<Ispit> ispitiLambda = ispiti.stream().filter(x -> x.getStudent().getJmbag() == s.getJmbag())
+				.collect(Collectors.toList());
+		long endLambda = System.currentTimeMillis();
+		System.out.println("Lambda filter : " + ((endLambda - startLambda) / 1000));
+
+		return ispitiLambda;
 	}
 
 	private static void IsprazniKolekcije(List<Profesor> poljeProfesora, List<Predmet> poljePredmeta,
 			List<Student> poljeStudenata, List<Ispit> poljeIspita, Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
-		
+
 		poljeIspita.clear();
 		poljePredmeta.clear();
 		poljeProfesora.clear();
@@ -568,17 +593,19 @@ public class Glavna {
 			}
 		}
 	}
-	
+
 	private static void IspisiPredmetePoProfesorima(Map<Profesor, List<Predmet>> mapaProfesorPredmeti) {
 		// TODO IZGUGLAJ KAKO ISPISATI MAPU, I ONDA TI ISPISI PROFESORE I PREDMETE
-		// KORISNO CE TI BITI DA DODAS TOSTRING METODE U PROFESOR I PREDMET AKO VEC NE POSTOJE
-		
+		// KORISNO CE TI BITI DA DODAS TOSTRING METODE U PROFESOR I PREDMET AKO VEC NE
+		// POSTOJE
+
 		// Ne Moze
 	}
-	
+
 	private static void IspisiNajnapucenijeSveuciliste(Sveuciliste<ObrazovnaUstanova> sveuciliste) {
 		BrojStudenataSorter comp = new BrojStudenataSorter();
-		ObrazovnaUstanova ou = sveuciliste.getObrazovneUstanove().stream().sorted((x, y) -> comp.compare(x, y)).collect(Collectors.toList()).get(0);
+		ObrazovnaUstanova ou = sveuciliste.getObrazovneUstanove().stream().sorted((x, y) -> comp.compare(x, y))
+				.collect(Collectors.toList()).get(0);
 		System.out.println(ou.getNazivUstanove() + " ima najvise studenata");
 	}
 }
