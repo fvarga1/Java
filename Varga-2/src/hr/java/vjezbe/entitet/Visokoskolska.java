@@ -19,6 +19,9 @@ public interface Visokoskolska {
 			zbrojPozitivnihOcjena += ispit.getOcjena().getVrijednost();
 			brojOcjena++;
 		}
+		if (brojOcjena == 0) {
+			throw new NemoguceOdreditiProsjekStudentaException();
+		}
 		float prosjek = (float) zbrojPozitivnihOcjena / brojOcjena;
 		return new BigDecimal(prosjek);
 	}

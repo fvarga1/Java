@@ -8,3 +8,12 @@
 2019-04-10 01:10:51,544 INFO [main] h.j.v.g.Glavna [Glavna.java:50] Program started
 2019-04-10 01:49:23,365 INFO [main] h.j.v.g.Glavna [Glavna.java:54] Program started
 2019-04-10 01:57:37,832 INFO [main] h.j.v.g.Glavna [Glavna.java:54] Program started
+2019-04-16 18:35:39,708 ERROR [main] h.j.v.g.Glavna [Glavna.java:418] null
+2019-04-16 18:35:40,944 ERROR [main] h.j.v.g.Glavna [Glavna.java:418] null
+2019-04-16 18:35:41,423 ERROR [main] h.j.v.g.Glavna [Glavna.java:418] null
+2019-04-16 18:35:41,986 ERROR [main] h.j.v.g.Glavna [Glavna.java:418] null
+2019-04-16 22:50:34,386 INFO [main] h.j.v.g.Glavna [Glavna.java:57] Program started
+2019-04-16 22:55:17,522 INFO [main] h.j.v.g.Glavna [Glavna.java:57] Program started
+2019-04-16 22:57:27,005 INFO [main] h.j.v.g.Glavna [Glavna.java:57] Program started
+2019-04-16 23:04:59,611 INFO [main] h.j.v.g.Glavna [Glavna.java:57] Program started
+2019-04-16 23:10:14,904 ERROR [main] h.j.v.g.Glavna [Glavna.java:314] Najmla�i studenti istih prosjeka i datuma rodjenja: filip curic i hrvoje mickovski

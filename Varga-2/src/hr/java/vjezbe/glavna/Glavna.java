@@ -412,8 +412,8 @@ public class Glavna {
 			try {
 				brojEctsBodova = unos.nextInt();
 			} catch (InputMismatchException e) {
-				System.out.println(
-						"Unijeli ste neispravan broj ECTS bodova. Molimo unesite numerički broj ECTS bodova.");
+				System.out
+						.println("Unijeli ste neispravan broj ECTS bodova. Molimo unesite numerički broj ECTS bodova.");
 				logger.error(e.getMessage());
 				ispravanUnos = false;
 			} finally {
@@ -475,8 +475,9 @@ public class Glavna {
 		String ime = unos.nextLine();
 		System.out.println("Unesite prezime studenta:");
 		String prezime = unos.nextLine();
-		System.out.println("Unesite datum rođenja studenta " + ime + " " + prezime + " u formatu (dd.MM.yyyy.): ");
-		LocalDate damtumRodjenja = LocalDate.parse(unos.next(), formatter);
+		System.out.println(
+				"Unesite datum rođenja studenta " + ime + " " + prezime + " u formatu (dd.MM.yyyy.): 12.12.1994.");
+		LocalDate damtumRodjenja = LocalDate.parse("12.12.1994.", formatter);
 		unos.nextLine();
 		System.out.println("Unesite JMBAG studenta: " + ime + " " + prezime + ":");
 		String jmbag = unos.nextLine();
@@ -557,8 +558,8 @@ public class Glavna {
 		do {
 			ispravanFormat = true;
 			try {
-				System.out.println("Unesite datum i vrijeme ispita u formatu (dd.MM.yyyy.THH:mm): ");
-				vrijemeIspita = LocalDateTime.parse(unos.next(), formatter2);
+				System.out.println("Unesite datum i vrijeme ispita u formatu (dd.MM.yyyy.THH:mm): 12.12.2019.T10:00");
+				vrijemeIspita = LocalDateTime.parse("12.12.2019.T10:00", formatter2);
 			} catch (Exception e) {
 				System.out.println(
 						"Unos ima neispravan format, ili neodgovaraju�u vrijednost. Morat �ete unijet ponovo.");
@@ -595,9 +596,27 @@ public class Glavna {
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("For : " + ((end - start) / 1000));
-		
+
 		long startLambda = System.currentTimeMillis();
 		poljePredmeta.forEach(x -> x.getStudenti().forEach(System.out::println));
+		long endLambda = System.currentTimeMillis();
+		System.out.println("For : " + ((endLambda - startLambda) / 1000));
+	}
+
+	private static void IspisiStudenteKojiSuDobiliOcjenuIzvrstan(List<Ispit> ispiti) {
+		long start = System.currentTimeMillis();
+		for (Ispit i : ispiti) {
+			if (i.getOcjena().getVrijednost() == Ocjena.IZVRSTAN.getVrijednost()) {
+				System.out.println(i.getStudent());
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("For : " + ((end - start) / 1000));
+
+		long startLambda = System.currentTimeMillis();
+		ispiti = ispiti.stream().filter(x -> x.getOcjena().getVrijednost() == Ocjena.IZVRSTAN.getVrijednost())
+				.collect(Collectors.toList());
+		ispiti.forEach(x -> System.out.println(x.getStudent()));
 		long endLambda = System.currentTimeMillis();
 		System.out.println("For : " + ((endLambda - startLambda) / 1000));
 	}
